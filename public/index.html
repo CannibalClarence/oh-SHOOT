@@ -18,6 +18,7 @@
 <body>
     <div id="progressbar"></div>
     <div id="scrollpath"></div>
+
     <nav id="nav" class="navbar navbar-expand-sm  bg-dark">
         <div class="container-fluid">
           <a id="oh-shoot" class="navbar-brand" href="#">
@@ -49,7 +50,7 @@
                 </a>
               </li>
               <li class="nav-item dropdown">
-                <a id="neon" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a id="" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                    <span></span>
                    <span></span>
                    <span></span>
@@ -75,56 +76,61 @@
         <script id="gameContainer" type="text/javascript" src="/game/game.js"></script>
     </div>
 
-    <div id="commentSection" class="mayColorText">
-        <div class="padding-20">
-            <form id="comment-form " class="padding-20">
-                <input class="padding-20" type="text" name="post-text" id="post-body" />
+
+       
+    
+    <!-- Modal content -->
+    <div id="loginModal" class="modal"> 
+    <div class="loginModalContent" id="staticBackdrop">
+        <div class="modalHeader">
+            <div id="signInDiv">
+                <h4>Login</h4>
+            </div>
+            <div id="signUpDiv">
+                <h4>SignUp</h4>
+            </div>
+
+        </div>
+        <div class="modalBody">
+            <form id="signUpForm">
+                <div class="mb-3">
+                    <label for="exampleInputName1" class="form-label">Username</label>
+                    <input class="form-input" type="text" id="exampleInputName1"  />
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input class="form-input" type="email" id="exampleInputEmail1" aria-describedby="emailHelp"  />
+                    <div id="emailHelp" class="form-text">yes, give us your email, get ready for spam!</div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input class="form-input" type="password" id="exampleInputPassword1"  />
+                </div>
             </form>
         </div>
+        <div class="modalBody">
+            <form id="signInForm">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input class="form-input" type="email" id="email-login"  />
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input class="form-input" type="password" id="password-login"  />
+                </div>
+            
+            </form>
+        </div>
+        <div class="modalFooter">
+            <button class="styleButton" type="submit" id="loginBtn">login</button>
+            
+            <button class="styleButton" type="submit" id="signupBtn">signup</button>
 
-        <!-- The Modal -->
-<div id="loginModal" class="modal">
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Launch static backdrop modal
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
         </div>
-        <div class="modal-body">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
-                </li>
-              </ul>
-              <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">...</div>
-                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">...</div>
-                <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
-                <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
-              </div>
-        </div>
-        
-      </div>
     </div>
-  </div>
-   
-</div>
+</div> 
+
 
       <script type="text/javascript">
         let progress = document.getElementById('progressbar');
@@ -142,4 +148,3 @@
     crossorigin="anonymous"></script>
   </body>
   </html>
-   

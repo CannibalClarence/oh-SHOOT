@@ -171,10 +171,6 @@ async function signupForm(event) {
 }
 
 
-document
-    .querySelector("#loginBtn")
-    .addEventListener("click", loginForm);
+document.querySelector("#loginBtn").addEventListener("click", loginForm);
 
-document
-    .querySelector("#signupBtn")
-    .addEventListener("click", signupForm);
+document.querySelector("#signupBtn").addEventListener("click", signupForm);
