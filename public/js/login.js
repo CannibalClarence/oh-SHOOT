@@ -119,7 +119,7 @@ async function loginForm(event) {
 async function signupForm(event) {
     event.preventDefault();
 
-    const username = document.querySelector("#name-signup").value.trim();
+    const username = document.querySelector("#username-signup").value.trim();
     const email = document.querySelector("#email-signup").value.trim();
     const password = document.querySelector("#password-signup").value.trim();
 
@@ -159,7 +159,7 @@ async function signupForm(event) {
         displayUser.setAttribute("style", "color: var(--lime)")
         document.getElementById("navbarSupportedContent").appendChild(displayUser)
 
-        document.querySelector("#name-signup").value = ""
+        document.querySelector("#username-signup").value = ""
         document.querySelector("#email-signup").value = ""
         document.querySelector("#password-signup").value = ""
 
