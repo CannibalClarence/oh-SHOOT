@@ -1,45 +1,67 @@
-// ---------- SET UP -------------
+/*
+  spaceinvaders.js
 
-//keyboard constants
+  the core logic for the space invaders game.
+
+*/
+
+/*  
+    Game Class
+
+    The Game class represents a Space Invaders game.
+    Create an instance of it, change any of the default values
+    in the settings, and call 'start' to run the game.
+
+    Call 'initialise' before 'start' to set the canvas the game
+    will draw to.
+
+    Call 'moveShip' or 'shipFire' to control the ship.
+
+    Listen for 'gameWon' or 'gameLost' events to handle the game
+    ending.
+*/
+
+//  Constants for the keyboard.
 var KEY_LEFT = 37;
 var KEY_RIGHT = 39;
 var KEY_SPACE = 32;
 
-//create GAME CLASS as an instance
+//  Creates an instance of the Game class.
+function Game() {
 
-function Game(){
+    //  Set the initial config.
     this.config = {
 
-        //game width and height
-        gameWidth: 400,
-        gameHeight: 300,
-        fps: 50,
-        debugMode: false,
-
-        //level and point system
-        levelDifficultyMultiplier: 0.2,
-        pointsPerInvader: 5,
-        limitLevelIncrease: 25,
-
-        //the speed and rate of the bombs
+        //how fast and often the bombs come
         bombRate: 0.05,
         bombMinVelocity: 50,
         bombMaxVelocity: 50,
 
-        //invader speed
-        invaderInitialVelocity: 30,
+        //how fast the invaders come at you
+        invaderInitialVelocity: 25,
         invaderAcceleration: 0,
         invaderDropDistance: 20,
         rocketVelocity: 120,
         rocketMaxFireRate: 2,
 
+        //width and height of game
+        gameWidth: 400,
+        gameHeight: 300,
+        fps: 50,
+        debugMode: false,
+
         //invader count
-        invaderRanks: 3,
+        invaderRanks: 10,
         invaderFiles: 10,
         shipSpeed: 120,
-    }
 
-    //  start game with 3 lives, 0 score, and level 1
+        //level and point system
+        levelDifficultyMultiplier: 0.2,
+        pointsPerInvader: 5,
+        limitLevelIncrease: 25
+    };
+
+    //  start game with 3 lives, 0
     this.lives = 3;
     this.width = 0;
     this.height = 0;
@@ -52,16 +74,17 @@ function Game(){
     this.stateStack = [];
 
     //  Input/output
-    this.pressedKeys = {}; //save pressed keys in an array
+    this.pressedKeys = {};
     this.gameCanvas =  null;
 
+    //  All sounds.
+    this.sounds = null;
 
     //  The previous x position, used for touch.
     this.previousX = 0;
 }
 
-
-// INITIALIZING THE GAME WITH THE HEIGHT AND WIDTH BASED ON VALUE INPUT IN INDEX.HTML SCRIPT SECTION
+//  Initialis the Game with a canvas.
 Game.prototype.initialise = function(gameCanvas) {
 
     //  Set the game canvas.
@@ -80,80 +103,81 @@ Game.prototype.initialise = function(gameCanvas) {
     };
 };
 
-function Ship(x, y) {
-    this.x = x;
-    this.y = y;
-    this.width = 20;
-    this.height = 16;
-}
-
-
-function Rocket(x, y, velocity) {
-    this.x = x;
-    this.y = y;
-    this.velocity = velocity;
-}
-
-
-function Bomb(x, y, velocity) {
-    this.x = x;
-    this.y = y;
-    this.velocity = velocity;
-}
+Game.prototype.moveToState = function(state) {
  
+   //  If we are in a state, leave it.
+   if(this.currentState() && this.currentState().leave) {
+     this.currentState().leave(game);
+     this.stateStack.pop();
+   }
+   
+   //  If there's an enter function for the new state, call it.
+   if(state.enter) {
+     state.enter(game);
+   }
+ 
+   //  Set the current state.
+   this.stateStack.pop();
+   this.stateStack.push(state);
+ };
 
-function Invader(x, y, rank, file, type) {
-    this.x = x;
-    this.y = y;
-    this.rank = rank;
-    this.file = file;
-    this.type = type;
-    this.width = 18;
-    this.height = 14;
-}
+//  Start the Game.
+Game.prototype.start = function() {
 
+    //  Move into the 'welcome' state.
+    this.moveToState(new WelcomeState());
 
-// -------- ALL GAME STATES ----------
+    //  Set the game variables.
+    this.lives = 3;
+    this.config.debugMode = /debug=true/.test(window.location.href);
 
-function GameState(updateProc, drawProc, keyDown, keyUp, enter, leave) {
-    this.updateProc = updateProc;
-    this.drawProc = drawProc;
-    this.keyDown = keyDown;
-    this.keyUp = keyUp;
-    this.enter = enter;
-    this.leave = leave;
-}
+    //  Start the game loop.
+    var game = this;
+    this.intervalId = setInterval(function () { GameLoop(game);}, 1000 / this.config.fps);
 
-//RETURN CURRENT STATE
+};
+
+//  Returns the current state.
 Game.prototype.currentState = function() {
-    //condition to test ? value if true : value if false
-
-    //IF we state array is more than 0 (aka we been playin), then return current state OTHERWISE null
     return this.stateStack.length > 0 ? this.stateStack[this.stateStack.length - 1] : null;
 };
 
+//  Mutes or unmutes the game.
+Game.prototype.mute = function(mute) {
 
-//MOVE BETWEEN STATES 
-Game.prototype.moveToState = function(state) {
- 
-    //  If we are in a state, leave it.
-    if(this.currentState() && this.currentState().leave) {
-      this.currentState().leave(game);
-      this.stateStack.pop();
+    //  If we've been told to mute, mute.
+    if(mute === true) {
+        this.sounds.mute = true;
+    } else if (mute === false) {
+        this.sounds.mute = false;
+    } else {
+        // Toggle mute instead...
+        this.sounds.mute = this.sounds.mute ? false : true;
     }
-    
-    //  If there's an enter function for the new state, call it.
-    if(state.enter) {
-      state.enter(game);
-    }
-  
-    //  Set the current state.
-    this.stateStack.pop();
-    this.stateStack.push(state);
 };
 
+//  The main loop.
+function GameLoop(game) {
+    var currentState = game.currentState();
+    if(currentState) {
 
-//PUSH STATE
+        //  Delta t is the time to update/draw.
+        var dt = 1 / game.config.fps;
+
+        //  Get the drawing context.
+        var ctx = this.gameCanvas.getContext("2d");
+        
+        //  Update if we have an update function. Also draw
+        //  if we have a draw function.
+        if(currentState.update) {
+            currentState.update(game, dt);
+        }
+        if(currentState.draw) {
+            currentState.draw(game, dt, ctx);
+        }
+    }
+}
+
 Game.prototype.pushState = function(state) {
 
     //  If there's an enter function for the new state, call it.
@@ -164,8 +188,6 @@ Game.prototype.pushState = function(state) {
     this.stateStack.push(state);
 };
 
-
-//POP STATE
 Game.prototype.popState = function() {
 
     //  Leave and pop the state.
@@ -179,64 +201,19 @@ Game.prototype.popState = function() {
     }
 };
 
-
-// ----------- ACTUAL GAME PART ---------
-
-//STOP THE GAME
+//  The stop function stops the game.
 Game.prototype.stop = function Stop() {
     clearInterval(this.intervalId);
-};
-
-
-//  The main loop.
-function GameLoop(game) {
-    var currentState = game.currentState();
-
-    if(currentState) {
-
-        //  DT is the number of seconds to update or draw.
-        var dt = 1 / game.config.fps;
-
-        //  Get the drawing context.
-        var ctx = this.gameCanvas.getContext("2d");
-        
-        //  Update if we have an update function. Also draw if we have a draw function (like drawing the background, the characters).
-        if(currentState.update) {
-            currentState.update(game, dt);
-        }
-        if(currentState.draw) {
-            currentState.draw(game, dt, ctx);
-        }
-    }
-}
-
-
-//START THE GAME
-Game.prototype.start = function() {
- 
-     //  Move into the 'welcome' state.
-     this.moveToState(new WelcomeState());
- 
-     //  Set the game variables.
-     this.lives = 3;
-     this.config.debugMode = /debug=true/.test(window.location.href);
- 
-     //  Start the game loop.
-     var game = this;
-     this.intervalId = setInterval(function () { GameLoop(game);}, 1000 / this.config.fps);
- 
 };
 
 //  Inform the game a key is down.
 Game.prototype.keyDown = function(keyCode) {
     this.pressedKeys[keyCode] = true;
-
     //  Delegate to the current state too.
     if(this.currentState() && this.currentState().keyDown) {
         this.currentState().keyDown(this, keyCode);
     }
 };
-
 
 Game.prototype.touchstart = function(s) {
     if(this.currentState() && this.currentState().keyDown) {
@@ -263,7 +240,6 @@ Game.prototype.touchmove = function(e) {
     this.previousX = currentX;
 };
 
-
 //  Inform the game a key is up.
 Game.prototype.keyUp = function(keyCode) {
     delete this.pressedKeys[keyCode];
@@ -273,12 +249,24 @@ Game.prototype.keyUp = function(keyCode) {
     }
 };
 
-//------ WELCOME INTO GAME -----
+function WelcomeState() {
 
-//initialize function
-function WelcomeState() {}
+}
 
-WelcomeState.prototype.update = function (game, dt) {};
+WelcomeState.prototype.enter = function(game) {
+
+    // Create and load the sounds.
+    game.sounds = new Sounds();
+    game.sounds.init();
+    game.sounds.loadSound('shoot', 'sounds/shoot.wav');
+    game.sounds.loadSound('bang', 'sounds/bang.wav');
+    game.sounds.loadSound('explosion', 'sounds/explosion.wav');
+};
+
+WelcomeState.prototype.update = function (game, dt) {
+
+
+};
 
 WelcomeState.prototype.draw = function(game, dt, ctx) {
 
@@ -289,19 +277,60 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillStyle = '#ffffff';
     ctx.textBaseline="middle"; 
     ctx.textAlign="center"; 
-    ctx.fillText("oh shoot!", game.width / 2, game.height/2 - 40); 
+    ctx.fillText("Space Invaders", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
 
-    ctx.fillText("Press 'Space' or click to start. You can press P to pause if you're bad at this.", game.width / 2, game.height/2); 
+    ctx.fillText("Press 'Space' or touch to start.", game.width / 2, game.height/2); 
 };
 
+WelcomeState.prototype.keyDown = function(game, keyCode) {
+    if(keyCode == KEY_SPACE) {
+        //  Space starts the game.
+        game.level = 1;
+        game.score = 0;
+        game.lives = 3;
+        game.moveToState(new LevelIntroState(game.level));
+    }
+};
 
-//--------- PLAY TIME -----------
+function GameOverState() {
 
-//INITIALIZE PLAY STATE
+}
+
+GameOverState.prototype.update = function(game, dt) {
+
+};
+
+GameOverState.prototype.draw = function(game, dt, ctx) {
+
+    //  Clear the background.
+    ctx.clearRect(0, 0, game.width, game.height);
+
+    ctx.font="30px Arial";
+    ctx.fillStyle = '#ffffff';
+    ctx.textBaseline="center"; 
+    ctx.textAlign="center"; 
+    ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
+    ctx.font="16px Arial";
+    ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
+    ctx.font="16px Arial";
+    ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+};
+
+GameOverState.prototype.keyDown = function(game, keyCode) {
+    if(keyCode == KEY_SPACE) {
+        //  Space restarts the game.
+        game.lives = 3;
+        game.score = 0;
+        game.level = 1;
+        game.moveToState(new LevelIntroState(1));
+    }
+};
+
+//  Create a PlayState with the game config and the level you are on.
 function PlayState(config, level) {
-    this.config = config; //save configuration as the set up
-    this.level = level; //save level as what we are on
+    this.config = config;
+    this.level = level;
 
     //  Game state.
     this.invaderCurrentVelocity =  10;
@@ -316,7 +345,6 @@ function PlayState(config, level) {
     this.bombs = [];
 }
 
-//ENTER PLAYSTATE
 PlayState.prototype.enter = function(game) {
 
     //  Create the ship.
@@ -355,127 +383,12 @@ PlayState.prototype.enter = function(game) {
     this.invaderNextVelocity = null;
 };
 
-
-//load images of the invader and main character
-const img = new Image();   // Create new img element
-img.src = '../image.png'; // Set source path
-
-const invImg = new Image();   // Create new img element
-invImg.src = '../slack-imgs.gif'; // Set source path
-
-
-//DRAW CHARACTERS AND LOAD THEM ONTO SCREEN 
-PlayState.prototype.draw = function(game, dt, ctx) {
-
-    //  Clear the background.
-    ctx.clearRect(0, 0, game.width, game.height);
-
-    ctx.drawImage(img, this.ship.x - (this.ship.width / 2), this.ship.y - (this.ship.height / 2), this.ship.width, this.ship.height);
-
-    for(var i=0; i<this.invaders.length; i++) {
-        var invader = this.invaders[i];
-        ctx.drawImage(invImg, invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
-    }
-
-    //  Draw bombs.
-    ctx.fillStyle = '#ff5555';
-    for(var i=0; i<this.bombs.length; i++) {
-        var bomb = this.bombs[i];
-        ctx.fillRect(bomb.x - 2, bomb.y - 2, 4, 4);
-    }
-
-    //  Draw rockets.
-    ctx.fillStyle = '#ff0000';
-    for(var i=0; i<this.rockets.length; i++) {
-        var rocket = this.rockets[i];
-        ctx.fillRect(rocket.x, rocket.y - 2, 1, 4);
-    }
-
-    //  Draw info.
-    var textYpos = game.gameBounds.bottom + ((game.height - game.gameBounds.bottom) / 2) + 14/2;
-    ctx.font="14px Arial";
-    ctx.fillStyle = '#ffffff';
-    var info = "Lives: " + game.lives;
-    ctx.textAlign = "left";
-    ctx.fillText(info, game.gameBounds.left, textYpos);
-    info = "Score: " + game.score + ", Level: " + game.level;
-    ctx.textAlign = "right";
-    ctx.fillText(info, game.gameBounds.right, textYpos);
-
-    //  If we're in debug mode, draw bounds.
-    if(this.config.debugMode) {
-        ctx.strokeStyle = '#ff0000';
-        ctx.strokeRect(0,0,game.width, game.height);
-        ctx.strokeRect(game.gameBounds.left, game.gameBounds.top,
-            game.gameBounds.right - game.gameBounds.left,
-            game.gameBounds.bottom - game.gameBounds.top);
-    }
-
-};
-
-//IF DOWN KEY IS PRESSED
-PlayState.prototype.keyDown = function(game, keyCode) {
-
-    if(keyCode == KEY_SPACE) {
-        //  Fire!
-        this.fireRocket();
-    }
-    if(keyCode == 80) {
-        //  Push the pause state.
-        game.pushState(new PauseState());
-    }
-};
-
-
-//IF UP KEY IS PRESSED
-PlayState.prototype.keyUp = function(game, keyCode) {
-
-};
-
-//IF DOWN KEY IS PRESSED
-PauseState.prototype.keyDown = function(game, keyCode) {
-
-    if(keyCode == 80) {
-        //  Pop the pause state.
-        game.popState();
-    }
-};
-
-
-PlayState.prototype.fireRocket = function() {
-    //  If we have no last rocket time, or the last rocket time 
-    //  is older than the max rocket rate, we can fire.
-    if(this.lastRocketTime === null || ((new Date()).valueOf() - this.lastRocketTime) > (1000 / this.rocketMaxFireRate))
-    {   
-        //  Add a rocket.
-        this.rockets.push(new Rocket(this.ship.x, this.ship.y - 12, this.config.rocketVelocity));
-        this.lastRocketTime = (new Date()).valueOf();
-
-        //  Play the 'shoot' sound.
-        //game.sounds.playSound('shoot');
-    }
-};
-
-function PauseState() {}
-
-PauseState.prototype.draw = function(game, dt, ctx) {
-
-    //  Clear the background.
-    ctx.clearRect(0, 0, game.width, game.height);
-
-    ctx.font="14px Arial";
-    ctx.fillStyle = '#ffffff';
-    ctx.textBaseline="middle";
-    ctx.textAlign="center";
-    ctx.fillText("Paused", game.width / 2, game.height/2);
-    return;
-};
-
-
-//UPDATE PLAYSTATE
 PlayState.prototype.update = function(game, dt) {
     
-    //  If the left or right arrow keys are pressed, move the ship. 
+    //  If the left or right arrow keys are pressed, move
+    //  the ship. Check this on ticks rather than via a keydown
+    //  event for smooth movement, otherwise the ship would move
+    //  more like a text editor caret.
     if(game.pressedKeys[KEY_LEFT]) {
         this.ship.x -= this.shipSpeed * dt;
     }
@@ -587,7 +500,7 @@ PlayState.prototype.update = function(game, dt) {
         }
         if(bang) {
             this.invaders.splice(i--, 1);
-            //game.sounds.playSound('bang');
+            game.sounds.playSound('bang');
         }
     }
 
@@ -622,7 +535,7 @@ PlayState.prototype.update = function(game, dt) {
                 bomb.y >= (this.ship.y - this.ship.height/2) && bomb.y <= (this.ship.y + this.ship.height/2)) {
             this.bombs.splice(i--, 1);
             game.lives--;
-            //game.sounds.playSound('explosion');
+            game.sounds.playSound('explosion');
         }
                 
     }
@@ -636,7 +549,7 @@ PlayState.prototype.update = function(game, dt) {
             (invader.y - invader.height/2) < (this.ship.y + this.ship.height/2)) {
             //  Dead by collision!
             game.lives = 0;
-           // game.sounds.playSound('explosion');
+            game.sounds.playSound('explosion');
         }
     }
 
@@ -652,9 +565,129 @@ PlayState.prototype.update = function(game, dt) {
         game.moveToState(new LevelIntroState(game.level));
     }
 };
+const img = new Image();   // Create new img element
+img.src = '../image.png'; // Set source path
+
+const invImg = new Image();   // Create new img element
+invImg.src = '../slack-imgs.gif'; // Set source path
+
+PlayState.prototype.draw = function(game, dt, ctx) {
+
+    //  Clear the background.
+    ctx.clearRect(0, 0, game.width, game.height);
+    
+    //  Draw ship.
+    // ctx.fillStyle = '#ff0000';
+    // ctx.fillRect(this.ship.x - (this.ship.width / 2), this.ship.y - (this.ship.height / 2), this.ship.width, this.ship.height);
+
+    ctx.drawImage(img, this.ship.x - (this.ship.width / 2), this.ship.y - (this.ship.height / 2), this.ship.width, this.ship.height);
+
+    //  Draw invaders.
+    //ctx.fillStyle = '#006600';
+    for(var i=0; i<this.invaders.length; i++) {
+        var invader = this.invaders[i];
+        // ctx.fillRect(invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
+        ctx.drawImage(invImg, invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
+    }
 
 
-//----------- NEW LEVEL -----------
+    //  Draw bombs.
+    ctx.fillStyle = '#ff5555';
+    for(var i=0; i<this.bombs.length; i++) {
+        var bomb = this.bombs[i];
+        ctx.fillRect(bomb.x - 2, bomb.y - 2, 4, 4);
+    }
+
+    //  Draw rockets.
+    ctx.fillStyle = '#ff0000';
+    for(var i=0; i<this.rockets.length; i++) {
+        var rocket = this.rockets[i];
+        ctx.fillRect(rocket.x, rocket.y - 2, 1, 4);
+    }
+
+    //  Draw info.
+    var textYpos = game.gameBounds.bottom + ((game.height - game.gameBounds.bottom) / 2) + 14/2;
+    ctx.font="14px Arial";
+    ctx.fillStyle = '#ffffff';
+    var info = "Lives: " + game.lives;
+    ctx.textAlign = "left";
+    ctx.fillText(info, game.gameBounds.left, textYpos);
+    info = "Score: " + game.score + ", Level: " + game.level;
+    ctx.textAlign = "right";
+    ctx.fillText(info, game.gameBounds.right, textYpos);
+
+    //  If we're in debug mode, draw bounds.
+    if(this.config.debugMode) {
+        ctx.strokeStyle = '#ff0000';
+        ctx.strokeRect(0,0,game.width, game.height);
+        ctx.strokeRect(game.gameBounds.left, game.gameBounds.top,
+            game.gameBounds.right - game.gameBounds.left,
+            game.gameBounds.bottom - game.gameBounds.top);
+    }
+
+};
+
+PlayState.prototype.keyDown = function(game, keyCode) {
+
+    if(keyCode == KEY_SPACE) {
+        //  Fire!
+        this.fireRocket();
+    }
+    if(keyCode == 80) {
+        //  Push the pause state.
+        game.pushState(new PauseState());
+    }
+};
+
+PlayState.prototype.keyUp = function(game, keyCode) {
+
+};
+
+PlayState.prototype.fireRocket = function() {
+    //  If we have no last rocket time, or the last rocket time 
+    //  is older than the max rocket rate, we can fire.
+    if(this.lastRocketTime === null || ((new Date()).valueOf() - this.lastRocketTime) > (1000 / this.rocketMaxFireRate))
+    {   
+        //  Add a rocket.
+        this.rockets.push(new Rocket(this.ship.x, this.ship.y - 12, this.config.rocketVelocity));
+        this.lastRocketTime = (new Date()).valueOf();
+
+        //  Play the 'shoot' sound.
+        game.sounds.playSound('shoot');
+    }
+};
+
+function PauseState() {
+
+}
+
+PauseState.prototype.keyDown = function(game, keyCode) {
+
+    if(keyCode == 80) {
+        //  Pop the pause state.
+        game.popState();
+    }
+};
+
+PauseState.prototype.draw = function(game, dt, ctx) {
+
+    //  Clear the background.
+    ctx.clearRect(0, 0, game.width, game.height);
+
+    ctx.font="14px Arial";
+    ctx.fillStyle = '#ffffff';
+    ctx.textBaseline="middle";
+    ctx.textAlign="center";
+    ctx.fillText("Paused", game.width / 2, game.height/2);
+    return;
+};
+
+/*  
+    Level Intro State
+
+    The Level Intro state shows a 'Level X' message and
+    a countdown for the level.
+*/
 function LevelIntroState(level) {
     this.level = level;
     this.countdownMessage = "3";
@@ -697,39 +730,140 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
 };
 
 
+/*
+ 
+  Ship
 
-//--------- GAME OVER -----------
-function GameOverState() {}
+  The ship has a position and that's about it.
 
-GameOverState.prototype.update = function(game, dt) {};
+*/
+function Ship(x, y) {
+    this.x = x;
+    this.y = y;
+    this.width = 20;
+    this.height = 16;
+}
 
-GameOverState.prototype.draw = function(game, dt, ctx) {
+/*
+    Rocket
 
-    //  Clear the background.
-    ctx.clearRect(0, 0, game.width, game.height);
+    Fired by the ship, they've got a position, velocity and state.
 
-    ctx.font="30px Arial";
-    ctx.fillStyle = '#ffffff';
-    ctx.textBaseline="center"; 
-    ctx.textAlign="center"; 
-    ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
-    ctx.font="16px Arial";
-    ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
-    ctx.font="16px Arial";
-    ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+    */
+function Rocket(x, y, velocity) {
+    this.x = x;
+    this.y = y;
+    this.velocity = velocity;
+}
+
+/*
+    Bomb
+
+    Dropped by invaders, they've got position, velocity.
+
+*/
+function Bomb(x, y, velocity) {
+    this.x = x;
+    this.y = y;
+    this.velocity = velocity;
+}
+ 
+/*
+    Invader 
+
+    Invader's have position, type, rank/file and that's about it. 
+*/
+
+function Invader(x, y, rank, file, type) {
+    this.x = x;
+    this.y = y;
+    this.rank = rank;
+    this.file = file;
+    this.type = type;
+    this.width = 18;
+    this.height = 14;
+}
+
+/*
+    Game State
+
+    A Game State is simply an update and draw proc.
+    When a game is in the state, the update and draw procs are
+    called, with a dt value (dt is delta time, i.e. the number)
+    of seconds to update or draw).
+
+*/
+function GameState(updateProc, drawProc, keyDown, keyUp, enter, leave) {
+    this.updateProc = updateProc;
+    this.drawProc = drawProc;
+    this.keyDown = keyDown;
+    this.keyUp = keyUp;
+    this.enter = enter;
+    this.leave = leave;
+}
+
+/*
+
+    Sounds
+
+    The sounds class is used to asynchronously load sounds and allow
+    them to be played.
+
+*/
+function Sounds() {
+
+    //  The audio context.
+    this.audioContext = null;
+
+    //  The actual set of loaded sounds.
+    this.sounds = {};
+}
+
+Sounds.prototype.init = function() {
+
+    //  Create the audio context, paying attention to webkit browsers.
+    context = window.AudioContext || window.webkitAudioContext;
+    this.audioContext = new context();
+    this.mute = false;
 };
 
+Sounds.prototype.loadSound = function(name, url) {
 
-GameOverState.prototype.keyDown = function(game, keyCode) {
+    //  Reference to ourselves for closures.
+    var self = this;
 
-    //if space is clicked, game is started over again
-    if(keyCode == KEY_SPACE) {
-        game.lives = 3;
-        game.score = 0;
-        game.level = 1;
+    //  Create an entry in the sounds object.
+    this.sounds[name] = null;
 
-        //move into a new state called Level Intro State
-        game.moveToState(new LevelIntroState(1));
+    //  Create an asynchronous request for the sound.
+    var req = new XMLHttpRequest();
+    req.open('GET', url, true);
+    req.responseType = 'arraybuffer';
+    req.onload = function() {
+        self.audioContext.decodeAudioData(req.response, function(buffer) {
+            self.sounds[name] = {buffer: buffer};
+        });
+    };
+    try {
+      req.send();
+    } catch(e) {
+      console.log("An exception occured getting sound the sound " + name + " this might be " +
+         "because the page is running from the file system, not a webserver.");
+      console.log(e);
     }
 };
 
+Sounds.prototype.playSound = function(name) {
+
+    //  If we've not got the sound, don't bother playing it.
+    if(this.sounds[name] === undefined || this.sounds[name] === null || this.mute === true) {
+        return;
+    }
+
+    //  Create a sound source, set the buffer, connect to the speakers and
+    //  play the sound.
+    var source = this.audioContext.createBufferSource();
+    source.buffer = this.sounds[name].buffer;
+    source.connect(this.audioContext.destination);
+    source.start(0);
+};
