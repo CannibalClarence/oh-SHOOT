@@ -27,7 +27,7 @@ function Game(){
         bombMaxVelocity: 50,
 
         //invader speed
-        invaderInitialVelocity: 30,
+        invaderInitialVelocity: 15,
         invaderAcceleration: 0,
         invaderDropDistance: 20,
         rocketVelocity: 120,
@@ -59,6 +59,11 @@ function Game(){
     //  The previous x position, used for touch.
     this.previousX = 0;
 }
+
+//SOUND VARIABLES
+var shoot = new Audio('../sounds/shoot.mp3');
+var bangs = new Audio('../sounds/bang.mp3');
+var explosion = new Audio('../sounds/explosion.mp3');
 
 
 // INITIALIZING THE GAME WITH THE HEIGHT AND WIDTH BASED ON VALUE INPUT IN INDEX.HTML SCRIPT SECTION
@@ -295,16 +300,6 @@ Game.prototype.keyUp = function(keyCode) {
 
 function WelcomeState() {}
 
-WelcomeState.prototype.enter = function(game) {
-
-    // Create and load the sounds.
-    game.sounds = new Sounds();
-    game.sounds.init();
-    game.sounds.loadSound('shoot', '../sounds/shoot.wav');
-    game.sounds.loadSound('bang', '../sounds/bang.wav');
-    game.sounds.loadSound('explosion', '../sounds/explosion.wav');
-};
-
 WelcomeState.prototype.update = function (game, dt) {};
 
 WelcomeState.prototype.draw = function(game, dt, ctx) {
@@ -500,8 +495,7 @@ PlayState.prototype.update = function(game, dt) {
             if(rocket.x >= (invader.x - invader.width/2) && rocket.x <= (invader.x + invader.width/2) &&
                 rocket.y >= (invader.y - invader.height/2) && rocket.y <= (invader.y + invader.height/2)) {
                 
-                //  Remove the rocket, set 'bang' so we don't process
-                //  this rocket again.
+                //  Remove the rocket, set 'bang' so we don't process this rocket again.
                 this.rockets.splice(j--, 1);
                 bang = true;
                 game.score += this.config.pointsPerInvader;
@@ -510,7 +504,7 @@ PlayState.prototype.update = function(game, dt) {
         }
         if(bang) {
             this.invaders.splice(i--, 1);
-            game.sounds.playSound('bang');
+           bangs.play();
         }
     }
 
@@ -545,7 +539,7 @@ PlayState.prototype.update = function(game, dt) {
                 bomb.y >= (this.ship.y - this.ship.height/2) && bomb.y <= (this.ship.y + this.ship.height/2)) {
             this.bombs.splice(i--, 1);
             game.lives--;
-            game.sounds.playSound('explosion');
+            explosion.play();
         }
                 
     }
@@ -559,7 +553,7 @@ PlayState.prototype.update = function(game, dt) {
             (invader.y - invader.height/2) < (this.ship.y + this.ship.height/2)) {
             //  Dead by collision!
             game.lives = 0;
-            game.sounds.playSound('explosion');
+            explosion.play();
         }
     }
 
@@ -588,7 +582,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
     
-    ctx.drawImage(img, this.ship.x - (this.ship.width / 2), this.ship.y - (this.ship.height / 2), this.ship.width, this.ship.height);
+    ctx.drawImage(img, this.ship.x - (this.ship.width / 2), this.ship.y - (this.ship.height / 2), this.ship.width+30, this.ship.height+30);
 
     for(var i=0; i<this.invaders.length; i++) {
         var invader = this.invaders[i];
@@ -658,7 +652,8 @@ PlayState.prototype.fireRocket = function() {
         this.lastRocketTime = (new Date()).valueOf();
 
         //  Play the 'shoot' sound.
-        game.sounds.playSound('shoot');
+        //game.sounds.playSound('shoot');
+        shoot.play();
     }
 };
 
@@ -764,61 +759,3 @@ GameOverState.prototype.keyDown = function(game, keyCode) {
 };
 
 
-// ----------- SOUNDS ---------
-
-function Sounds() {
-
-    //  The audio context.
-    this.audioContext = null;
-
-    //  The actual set of loaded sounds.
-    this.sounds = {};
-}
-
-Sounds.prototype.init = function() {
-
-    //  Create the audio context, paying attention to webkit browsers.
-    context = window.AudioContext || window.webkitAudioContext;
-    this.audioContext = new context();
-    this.mute = false;
-};
-
-Sounds.prototype.loadSound = function(name, url) {
-
-    //  Reference to ourselves for closures.
-    var self = this;
-
-    //  Create an entry in the sounds object.
-    this.sounds[name] = null;
-
-    //  Create an asynchronous request for the sound.
-    var req = new XMLHttpRequest();
-    req.open('GET', url, true);
-    req.responseType = 'arraybuffer';
-    req.onload = function() {
-        self.audioContext.decodeAudioData(req.response, function(buffer) {
-            self.sounds[name] = {buffer: buffer};
-        });
-    };
-    try {
-      req.send();
-    } catch(e) {
-      console.log("An exception occured getting sound the sound " + name + " this might be " +
-         "because the page is running from the file system, not a webserver.");
-      console.log(e);
-    }
-};
-
-Sounds.prototype.playSound = function(name) {
-
-    //  If we've not got the sound, don't bother playing it.
-    if(this.sounds[name] === undefined || this.sounds[name] === null || this.mute === true) {
-        return;
-    }
-
-    //  Create a sound source, set the buffer, connect to the speakers and play the sound.
-    var source = this.audioContext.createBufferSource();
-    source.buffer = this.sounds[name].buffer;
-    source.connect(this.audioContext.destination);
-    source.start(0);
-};
