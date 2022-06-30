@@ -5,6 +5,7 @@ var KEY_LEFT = 37;
 var KEY_RIGHT = 39;
 var KEY_SPACE = 32;
 
+
 //create GAME CLASS as an instance
 
 function Game(){
@@ -65,6 +66,19 @@ var shoot = new Audio('../sounds/shoot.mp3');
 var bangs = new Audio('../sounds/bang.mp3');
 var explosion = new Audio('../sounds/explosion.mp3');
 
+const allSounds = document.querySelectorAll("audio");
+var isMuted = false;
+
+//MUTE FUNCTION
+document.addEventListener("keydown", event => {
+    if (event.key === "m") {
+       if (isMuted === true){
+        isMuted = false;
+        return;
+       }
+       isMuted = true;
+    }
+});
 
 // INITIALIZING THE GAME WITH THE HEIGHT AND WIDTH BASED ON VALUE INPUT IN INDEX.HTML SCRIPT SECTION
 Game.prototype.initialise = function(gameCanvas) {
@@ -234,20 +248,9 @@ Game.prototype.start = function() {
  
 };
 
-// MUTE GAME
-Game.prototype.mute = function(mute) {
 
-    //  If we've been told to mute, mute.
-    if(mute === true) {
-        this.sounds.mute = true;
-    } else if (mute === false) {
-        this.sounds.mute = false;
-    } else {
-        // condition? value if false: value if true
-        // Toggle mute instead...
-        this.sounds.mute = this.sounds.mute ? false : true;
-    }
-};
+
+
 
 
 //  COMMUNICATE WHEN DOWN KEY IS PRESSED
@@ -504,7 +507,9 @@ PlayState.prototype.update = function(game, dt) {
         }
         if(bang) {
             this.invaders.splice(i--, 1);
-           bangs.play();
+            if (isMuted === false){
+                bangs.play()
+            };
         }
     }
 
@@ -539,7 +544,9 @@ PlayState.prototype.update = function(game, dt) {
                 bomb.y >= (this.ship.y - this.ship.height/2) && bomb.y <= (this.ship.y + this.ship.height/2)) {
             this.bombs.splice(i--, 1);
             game.lives--;
-            explosion.play();
+            if (isMuted === false){
+                explosion.play()
+            }    ;
         }
                 
     }
@@ -652,8 +659,9 @@ PlayState.prototype.fireRocket = function() {
         this.lastRocketTime = (new Date()).valueOf();
 
         //  Play the 'shoot' sound.
-        //game.sounds.playSound('shoot');
-        shoot.play();
+        if (isMuted === false){
+            shoot.play()
+        };
     }
 };
 
