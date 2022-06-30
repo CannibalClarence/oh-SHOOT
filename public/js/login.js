@@ -119,9 +119,27 @@ async function loginForm(event) {
 async function signupForm(event) {
     event.preventDefault();
 
-    const username = document.querySelector("#username-signup").value.trim();
-    const email = document.querySelector("#email-signup").value.trim();
-    const password = document.querySelector("#password-signup").value.trim();
+    const username = document.getElementById("#username-signup");
+    const userVal = "";
+    if (username) {
+        userVal = username.value.trim;
+    }
+
+    const email = document.getElementById("#email-signup");
+    const emailVal = "";
+    if (email) {
+        emailVal = email.value.trim;
+    }
+
+    const password = document.getElementById("#password-signup");
+    const passwordVal = "";
+    if (password) {
+        passwordlVal = password.value.trim;
+    }
+
+    // const username = document.querySelector("#username-signup").value.trim();
+    // const email = document.querySelector("#email-signup").value.trim();
+    // const password = document.querySelector("#password-signup").value.trim();
 
     if (username && email && password) {
         const response = await fetch("/api/users/create", {
