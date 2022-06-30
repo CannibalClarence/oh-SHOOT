@@ -238,6 +238,7 @@ Game.prototype.mute = function(mute) {
     } else if (mute === false) {
         this.sounds.mute = false;
     } else {
+        // condition? value if false: value if true
         // Toggle mute instead...
         this.sounds.mute = this.sounds.mute ? false : true;
     }
@@ -299,9 +300,9 @@ WelcomeState.prototype.enter = function(game) {
     // Create and load the sounds.
     game.sounds = new Sounds();
     game.sounds.init();
-    game.sounds.loadSound('shoot', 'sounds/shoot.wav');
-    game.sounds.loadSound('bang', 'sounds/bang.wav');
-    game.sounds.loadSound('explosion', 'sounds/explosion.wav');
+    game.sounds.loadSound('shoot', '../sounds/shoot.wav');
+    game.sounds.loadSound('bang', '../sounds/bang.wav');
+    game.sounds.loadSound('explosion', '../sounds/explosion.wav');
 };
 
 WelcomeState.prototype.update = function (game, dt) {};
@@ -815,8 +816,7 @@ Sounds.prototype.playSound = function(name) {
         return;
     }
 
-    //  Create a sound source, set the buffer, connect to the speakers and
-    //  play the sound.
+    //  Create a sound source, set the buffer, connect to the speakers and play the sound.
     var source = this.audioContext.createBufferSource();
     source.buffer = this.sounds[name].buffer;
     source.connect(this.audioContext.destination);
