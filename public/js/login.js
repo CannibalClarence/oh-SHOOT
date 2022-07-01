@@ -95,14 +95,10 @@ async function loginForm(event) {
         });
 
         if (response.ok) {
-            console.log("Logged in successfully!");
+            alert("GREAT SUCCESS!")
+            console.log("GREAT SUCCESS!");
             console.log(JSON.stringify(username))
-            loginModal.setAttribute("style", "display: none")
-            //appending username to page
-            let displayUser = document.createElement("div")
-            displayUser.innerHTML = "Welcome! " + JSON.stringify(username)
-            displayUser.setAttribute("style", "color: var(--lime)")
-            document.getElementById("navbarSupportedContent").appendChild(displayUser)
+           
 
             document.querySelector("#email-login").value = ""
             document.querySelector("#password-login").value = ""
@@ -137,10 +133,6 @@ async function signupForm(event) {
         passwordlVal = password.value.trim;
     }
 
-    // const username = document.querySelector("#username-signup").value.trim();
-    // const email = document.querySelector("#email-signup").value.trim();
-    // const password = document.querySelector("#password-signup").value.trim();
-
     if (username && email && password) {
         const response = await fetch("/api/users/create", {
             method: "POST",
@@ -170,13 +162,7 @@ async function signupForm(event) {
     });
 
     if (responseTwo.ok) {
-        alert("Signed up & Logged in successfully!");
-        loginModal.setAttribute("style", "display: none")
-        let displayUser = document.createElement("div")
-        displayUser.innerHTML = "Welcome! " + JSON.stringify(username)
-        displayUser.setAttribute("style", "color: var(--lime)")
-        document.getElementById("navbarSupportedContent").appendChild(displayUser)
-
+        alert("Have at it, you murderous space cow!");
         document.querySelector("#username-signup").value = ""
         document.querySelector("#email-signup").value = ""
         document.querySelector("#password-signup").value = ""
