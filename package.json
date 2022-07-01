@@ -1,0 +1,31 @@
+{
+    "name": "oh-shoot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/CannibalClarence/oh-SHOOT.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/CannibalClarence/oh-SHOOT/issues"
+    },
+    "homepage": "https://github.com/CannibalClarence/oh-SHOOT#readme",
+    "dependencies": {
+      "bcrypt": "^5.0.1",
+      "connect-session-sequelize": "^7.1.4",
+      "cookie-parser": "^1.4.6",
+      "dotenv": "^16.0.1",
+      "express": "^4.18.1",
+      "express-session": "^1.17.3",
+      "mysql2": "^2.3.3",
+      "path": "^0.12.7",
+      "sequelize": "^6.21.1"
+    }
+  }
