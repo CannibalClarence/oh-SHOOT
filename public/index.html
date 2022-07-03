@@ -16,15 +16,12 @@
    
     <!-- end -->
 
-    <!-- Load React API -->
-    <script src= "https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <!-- Load React DOM-->
-    <script src= "https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <!-- Load Babel Compiler -->
-    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-
 <!-- local style -->
     <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/chat.css">
+    <link rel="stylesheet" type="text/css" href="./css/modal.css">
+    <link rel="stylesheet" type="text/css" href="./css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="./css/scrollbar.css">
 
     <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,7 +103,7 @@
     </div>
     
     <div id="info">
-      <p> Move with arrow keys, fire with space bar. As you complete each level, the fish will get faster</p>
+      <p> Move the space cow with the arrow keys, fire with space bar. As you complete each level, the blob fish will get faster!</p>
     </div>
 
     <script src="game/starfield.js"></script>
@@ -169,11 +166,12 @@
     </script>
   </section>  
 
-  <!-- comment section -->
-
-  <iframe id="chat-room" src="https://deadsimplechat.com/SFuNO7CMi" width="100%" height="600px"></iframe>
-
-  
+  <!-- Chat Room Section -->
+    <div class="chat">
+        <h2>Talk smack on your friends highscore live!</h2>
+    <iframe id="chat-room" src="https://deadsimplechat.com/SFuNO7CMi" width="100%" height="600px"></iframe>
+</div>
+  <!-- End Of Chat Room -->
     
 
 </body>
@@ -236,7 +234,6 @@
 <!-- local js -->
 
 <script src="./js/login.js"></script>
-<script src="./js/comments.js"></script>
 
 <!-- local js end -->
 

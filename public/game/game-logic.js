@@ -579,10 +579,10 @@ PlayState.prototype.update = function(game, dt) {
 
 
 const img = new Image();   // Create new img element
-img.src = '../image.png'; // Set source path
+img.src = '../img/image.png'; // Set source path
 
 const invImg = new Image();   // Create new img element
-invImg.src = '../slack-imgs.gif'; // Set source path
+invImg.src = '../img/slack-imgs.gif'; // Set source path
 
 PlayState.prototype.draw = function(game, dt, ctx) {
 

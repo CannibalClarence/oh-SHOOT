@@ -1,0 +1,20 @@
+/* Chat Room */
+
+.chat h2 {
+    padding-right: 5rem;
+    padding-left: 5rem; 
+     color: #03e9f4;
+    transition: 0.5s; 
+    margin: 2px, 2px, 2px ,2px;
+    font-family: 'Press Start 2P', cursive;
+    margin-top: 100px;
+
+}
+
+#chat-room {
+    margin-top: 50px;
+    box-shadow: 0 0 5px #03e9f4,
+    0 0 5px #03e9f4,
+    0 0 25px #03e9f4,
+    0 0 150px #03e9f4;
+}
