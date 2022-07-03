@@ -78,13 +78,13 @@ if (document.getElementById("signInDiv")) {
 
 async function loginForm(event) {
     event.preventDefault();
-    //inputs i need for login
+    //inputs for login
     const username = document.querySelector("#email-login").value.trim();
     const password = document.querySelector("#password-login").value.trim();
 
-    //make sure these have content
+    // these must have content
     if (username && password) {
-        //fetch from my route
+        //fetch 
         const response = await fetch("/api/users/", {
             method: "POST",
             body: JSON.stringify({
@@ -104,7 +104,7 @@ async function loginForm(event) {
             document.querySelector("#password-login").value = ""
 
 
-            // document.location.replace("/");
+            document.location.replace("/");
         } else {
             alert(response.statusText);
         }
@@ -166,7 +166,7 @@ async function signupForm(event) {
         document.querySelector("#username-signup").value = ""
         document.querySelector("#email-signup").value = ""
         document.querySelector("#password-signup").value = ""
-
+        console.log(responseTwo);
 
     } else {
         //alert sending response from login attempt
