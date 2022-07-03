@@ -6,7 +6,7 @@ const userRoutes = require("./api/user-routes")
 
 router.use('/', homeRoutes);
 router.use("/api/users", userRoutes);
-
+router.use("/api/comments", commentRoutes);
 
 
 

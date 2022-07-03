@@ -3,12 +3,12 @@ body, html {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    
     }
 
     #starfield {
         width:100%;
-        height:100%;
+        height:80%;
         z-index: -1;
         position: absolute;
         left: 0px;
@@ -119,11 +119,13 @@ html{
                 0 0 200px #03e9f4;
 }
 
+/* shooting stars start */
+
 #neon span{
     position: absolute;
     display: block;
 }
-/* 
+
 #neon span:nth-child(1){
     top: 0;
     left: -100%;
@@ -197,7 +199,7 @@ html{
     50%,100%{
         bottom: 100%; 
     }
-} */
+}
 
 #oh-shoot{
     font-size: 30px;
@@ -226,13 +228,7 @@ html{
   }
 
   .modalHeader div:hover{
-    background: #03e9f4;
-    color: #050801;
-    box-shadow: 0 0 5px #03e9f4,
-                0 0 25px #03e9f4,
-                0 0 50px #03e9f4,
-                0 0 200px #03e9f4;
-                cursor:pointer ;
+  
   }
 
   
@@ -295,3 +291,34 @@ html{
     
 }
   
+.styleButton:hover { 
+    background: #03e9f4;
+    color: #050801;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 200px #03e9f4;
+                cursor:pointer ;
+}
+
+#signInDiv:hover {
+    background: #03e9f4;
+    color: #050801;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 200px #03e9f4;
+                cursor:pointer ;
+}
+
+#signUpDiv:hover {
+    background: #03e9f4;
+    color: #050801;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 200px #03e9f4;
+                cursor:pointer ;
+}
+
+/* Comment Section */
