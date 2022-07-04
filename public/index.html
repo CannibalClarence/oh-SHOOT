@@ -108,6 +108,9 @@
 
     <script src="game/starfield.js"></script>
     <script src="game/game-logic.js"></script>
+    <script src="game/save-hs.js"></script>
+    <!-- GAME CODE -->
+
     <script>
        //  Create the starfield.
       var container = document.getElementById('starfield');
@@ -161,16 +164,33 @@
           document.getElementById("muteLink").innerText = game.sounds.mute ? "unmute" : "mute";
       }
     </script>
-    <script type="text/javascript">
-      
-    </script>
+    <!-- END OF GAME CODE -->
+
+    <!-- SAVE CODE AND SAVE USERNAME -->
+    <div id="saveScore">
+        <div>
+            <h2> Game over! Your Final Score is: <span id="scoreText"></span> To play again, press space</h2>
+        </div>
+        <form>
+            <input id = "inputInitials" type="text" title="Enter Your Initials">
+            <button class="btn" type="submit" id="saveScoreBtn"> Submit </button>
+        </form>
+        
+    </div>
+    <!-- END OF SAVE CODE AND SAVE USERNAME -->
   </section>  
 
-  <!-- Chat Room Section -->
+    <!--HIGH SCORE SECTION -->
+    <div class="hi-scores">
+    
+    </div>
+    <!-- End Of Chat Room -->
+
+  <!-- CHAT ROOM SECTION -->
     <div class="chat">
-        <h2>Talk smack on your friends highscore live!</h2>
+        <!-- <h2>Talk smack on your friends highscore live!</h2> -->
     <iframe id="chat-room" src="https://deadsimplechat.com/SFuNO7CMi" width="100%" height="600px"></iframe>
-</div>
+    </div>
   <!-- End Of Chat Room -->
     
 

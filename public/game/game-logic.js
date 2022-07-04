@@ -317,7 +317,7 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillText("oh shoot!", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
 
-    ctx.fillText("Press 'Space' to start. You can press P to pause if you're bad at this", game.width / 2, game.height/2); 
+    // ctx.fillText("Press 'Space' to start. You can press P to pause if you're bad at this", game.width / 2, game.height/2); 
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
@@ -735,6 +735,18 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
 
 
 // ----------- GAME OVER ---------
+var gameOver = false;
+var scoreText = document.querySelector("#scoreText");
+var saveScoreBtn = document.querySelector("#saveScoreBtn");
+
+function displayScore(){
+    var saveScore = document.getElementById("saveScore");
+    //saveScore.style.display = "block";
+    saveScore.atrr("style", "display:block !important");
+}
+var saveScore = document.getElementById("saveScore");
+// //saveScore.style.display = "block";
+// saveScore.attr("style", "display:block !important");
 
 function GameOverState() {}
 
@@ -744,17 +756,33 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
 
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
-
-    ctx.font="30px Arial";
-    ctx.fillStyle = '#ffffff';
-    ctx.textBaseline="center"; 
-    ctx.textAlign="center"; 
-    ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
-    ctx.font="16px Arial";
-    ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
-    ctx.font="16px Arial";
-    ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+    gameOver = true;
+    
 };
+
+if (gameOver){
+    displayScore();
+}
+
+saveScoreBtn.addEventListener("click", function(){
+    console.log("submitted")
+});
+
+// GameOverState.prototype.draw = function(game, dt, ctx) {
+
+//     //  Clear the background.
+//     ctx.clearRect(0, 0, game.width, game.height);
+
+//     ctx.font="30px Arial";
+//     ctx.fillStyle = '#ffffff';
+//     ctx.textBaseline="center"; 
+//     ctx.textAlign="center"; 
+//     ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
+//     ctx.font="16px Arial";
+//     ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
+//     ctx.font="16px Arial";
+//     ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+// };
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
     if(keyCode == KEY_SPACE) {
