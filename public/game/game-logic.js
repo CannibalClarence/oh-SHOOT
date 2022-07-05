@@ -736,17 +736,15 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
 
 // ----------- GAME OVER ---------
 var gameOver = false;
+var saveScore = document.querySelector("#saveScore");
 var scoreText = document.querySelector("#scoreText");
 var saveScoreBtn = document.querySelector("#saveScoreBtn");
 
 function displayScore(){
-    var saveScore = document.getElementById("saveScore");
     //saveScore.style.display = "block";
     saveScore.atrr("style", "display:block !important");
 }
-var saveScore = document.getElementById("saveScore");
-// //saveScore.style.display = "block";
-// saveScore.attr("style", "display:block !important");
+
 
 function GameOverState() {}
 
@@ -762,7 +760,7 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
 
 if (gameOver){
     displayScore();
-}
+} 
 
 saveScoreBtn.addEventListener("click", function(){
     console.log("submitted")
