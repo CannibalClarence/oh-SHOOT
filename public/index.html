@@ -108,7 +108,6 @@
 
     <script src="game/starfield.js"></script>
     <script src="game/game-logic.js"></script>
-    <script src="game/save-hs.js"></script>
     <!-- GAME CODE -->
 
     <script>
@@ -159,39 +158,26 @@
           game.touchmove(e);
       }, false);
 
-      function toggleMute() {
-          game.mute();
-          document.getElementById("muteLink").innerText = game.sounds.mute ? "unmute" : "mute";
-      }
     </script>
     <!-- END OF GAME CODE -->
 
-    <!-- SAVE CODE AND SAVE USERNAME -->
-    <div style = "display: none" id="saveScore">
-        <div>
-            <h2> Game over! Your Final Score is: <span id="scoreText"></span> To play again, press space</h2>
-        </div>
-        <form>
-            <input id = "inputInitials" type="text" title="Enter Your Initials">
-            <button class="btn" type="submit" id="saveScoreBtn"> Submit </button>
-        </form>
-        
-    </div>
-    <!-- END OF SAVE CODE AND SAVE USERNAME -->
   </section>  
 
+  <section class = "bottom-section" style="display:flex;">
     <!--HIGH SCORE SECTION -->
     <div class="hi-scores">
-    
+        <h3> Your personal best score is: <h2 id="bestScore"></h2></h3>
     </div>
-    <!-- End Of high score section -->
+        <!-- End Of high score section -->
 
-  <!-- CHAT ROOM SECTION -->
-    <div class="chat">
-        <!-- <h2>Talk smack on your friends highscore live!</h2> -->
-    <iframe id="chat-room" src="https://deadsimplechat.com/SFuNO7CMi" width="100%" height="600px"></iframe>
+    <!-- CHAT ROOM SECTION -->
+    <div class="chat" style="flex: 3">
+            <!-- <h2>Talk smack on your friends highscore live!</h2> -->
+        <iframe id="chat-room" src="https://deadsimplechat.com/SFuNO7CMi" width="100%" height="600px"></iframe>
     </div>
-  <!-- End Of Chat Room -->
+    <!-- End Of Chat Room -->
+  </section>
+    
     
 
 </body>

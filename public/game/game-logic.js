@@ -1,4 +1,13 @@
 // ---------- SET UP -------------
+var bestScore = document.getElementById("bestScore"); //link to span item in main page
+
+var scoreHigh //variable to save highest score
+
+const SAVE_KEY_SCORE = "highscore"; // save key for local storage of high score
+
+var scoreStr = localStorage.getItem(SAVE_KEY_SCORE);
+
+
 
 //keyboard constants
 var KEY_LEFT = 37;
@@ -97,6 +106,8 @@ Game.prototype.initialise = function(gameCanvas) {
         top: gameCanvas.height / 2 - this.config.gameHeight / 2,
         bottom: gameCanvas.height / 2 + this.config.gameHeight / 2,
     };
+
+    
 };
 
 function Ship(x, y) {
@@ -318,6 +329,9 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.font="16px Arial";
 
     // ctx.fillText("Press 'Space' to start. You can press P to pause if you're bad at this", game.width / 2, game.height/2); 
+
+    var bestScore = document.getElementById("bestScore"); //link to span item in main page
+    bestScore.textContent = scoreHigh;
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
@@ -735,16 +749,11 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
 
 
 // ----------- GAME OVER ---------
-var gameOver = false;
-var saveScore = document.querySelector("#saveScore");
-var scoreText = document.querySelector("#scoreText");
-var saveScoreBtn = document.querySelector("#saveScoreBtn");
-
-function displayScore(){
-    //saveScore.style.display = "block";
-    saveScore.atrr("style", "display:block !important");
+if (scoreStr === null) {
+    scoreHigh = 0;
+} else {
+    scoreHigh = parseInt(scoreStr);
 }
-
 
 function GameOverState() {}
 
@@ -754,33 +763,28 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
 
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
-    gameOver = true;
-    
+
+    ctx.font="30px Arial";
+    ctx.fillStyle = '#ffffff';
+    ctx.textBaseline="center"; 
+    ctx.textAlign="center"; 
+    ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
+    ctx.font="16px Arial";
+    ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
+    ctx.font="16px Arial";
+    ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+
+
+    if (game.score > scoreHigh) {
+        scoreHigh = game.score;
+        localStorage.setItem(SAVE_KEY_SCORE, scoreHigh);
+    } 
+    var bestScore = document.getElementById("bestScore"); //link to span item in main page
+    bestScore.textContent = scoreHigh;
+
 };
 
-if (gameOver){
-    displayScore();
-} 
 
-saveScoreBtn.addEventListener("click", function(){
-    console.log("submitted")
-});
-
-// GameOverState.prototype.draw = function(game, dt, ctx) {
-
-//     //  Clear the background.
-//     ctx.clearRect(0, 0, game.width, game.height);
-
-//     ctx.font="30px Arial";
-//     ctx.fillStyle = '#ffffff';
-//     ctx.textBaseline="center"; 
-//     ctx.textAlign="center"; 
-//     ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
-//     ctx.font="16px Arial";
-//     ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
-//     ctx.font="16px Arial";
-//     ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
-// };
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
     if(keyCode == KEY_SPACE) {
