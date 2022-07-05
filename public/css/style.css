@@ -47,6 +47,16 @@ h2{
     font-family: 'Press Start 2P', cursive;
     color: #03e9f4;
 }
+
+ul ol {
+    font-family: 'Press Start 2P', cursive;
+    color: #03e9f4;
+}
+
+span{
+    font-family: 'Press Start 2P', cursive;
+    color: #03e9f4;
+}
 /* game section */
 #gameContainer{
     background: #000000;
@@ -65,7 +75,11 @@ body{
     background: #000000;
 }
 
-/* #saveScore {
+#saveScore {
     display: none;
-} */
+    margin: 200px 100px;
+}
 
+.btn{
+    color: #03e9f4;
+}

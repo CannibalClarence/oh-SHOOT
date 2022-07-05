@@ -99,9 +99,22 @@
   <section>
     <div id = "starfield"></div>
     <div id="gamecontainer">
+        <!-- SAVE CODE AND SAVE USERNAME -->
+        <div id="saveScore">
+            <div>
+                <h3> Game over! Your Final Score is: <span id="scoreText"></span> Input your username </h3>
+            </div>
+            <form>
+                <input id = "inputInitials" type="text" title="Enter Your Initials">
+                <button class="btn" type="submit" id="saveScoreBtn"> Submit </button>
+            </form>
+            
+        </div>
+        <!-- END OF SAVE CODE AND SAVE USERNAME -->
+
         <canvas id="gameCanvas"> </canvas>
     </div>
-    
+        
     <div id="info">
       <p> Move the space cow with the arrow keys, fire with space bar. As you complete each level, the blob fish will get faster!</p>
     </div>
@@ -109,6 +122,8 @@
     <script src="game/starfield.js"></script>
     <script src="game/game-logic.js"></script>
     <!-- GAME CODE -->
+
+
 
     <script>
        //  Create the starfield.
@@ -161,12 +176,15 @@
     </script>
     <!-- END OF GAME CODE -->
 
+    
   </section>  
 
   <section class = "bottom-section" style="display:flex;">
     <!--HIGH SCORE SECTION -->
     <div class="hi-scores">
-        <h3> Your personal best score is: <h2 id="bestScore"></h2></h3>
+        <h3> Your personal best score is: <span id="bestScore"></span></h3>
+        <h2> High Scores </h2>
+        <ul id="listofHS"></ul>
     </div>
         <!-- End Of high score section -->
 
