@@ -19,6 +19,7 @@
 <!-- local style -->
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/chat.css">
+    <link rel="stylesheet" type="text/css" href="./css/instructions.css">
     <link rel="stylesheet" type="text/css" href="./css/modal.css">
     <link rel="stylesheet" type="text/css" href="./css/navbar.css">
     <link rel="stylesheet" type="text/css" href="./css/scrollbar.css">
@@ -67,7 +68,15 @@
                     <span></span>
                     Chat-Room
                 </a>
-              </li>
+              <li class="nav-item">
+                <a id="neon" class="nav-link" href="#info">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    How-To-Play
+                </a>
+              </li>     
               <li id="neon" class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                    <span></span>
@@ -76,14 +85,14 @@
                    <span></span>
                    Meet The Dev's
                 </a>
-                  <ul id="mayDropMenu" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <ul id="mayDropMenu" class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="https://github.com/AnukaZan" target="_blank">Anuka Zan</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="https://github.com/CannibalClarence" target="_blank">Theo Phillips</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="https://github.com/jnegrete0503" target="_blank">Jose Negrete</a></li>
                 </ul>
-              </li>          
+              </li>     
               <li class="nav-item">
                 <iframe padding-bottom:105%;position:relative; src="https://giphy.com/embed/QGBWk7DnckEN2" width="50%" height="50%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/reflection-blobfish-QGBWk7DnckEN2"></a></p>
               </li> 
@@ -116,7 +125,12 @@
     </div>
         
     <div id="info">
-      <p> Move the space cow with the arrow keys, fire with space bar. As you complete each level, the blob fish will get faster!</p>
+      <!-- <p> Move the space cow with the arrow keys, fire with space bar. As you complete each level, the blob fish will get faster!</p>
+      <p> -->
+        <p>Step 1: To start press the space bar</p>
+        <p>Step 2: To move the space cow use the left and right arrows</p>
+        <p>step 3: To Fire use the space bar</p>
+        <p>step 4: Once you complete level one the blob fish will continue to get faster each level. Goodluck.</p>
     </div>
 
     <script src="game/starfield.js"></script>
@@ -192,6 +206,7 @@
     <div class="chat" style="flex: 3">
             <!-- <h2>Talk smack on your friends highscore live!</h2> -->
         <iframe id="chat-room" src="https://deadsimplechat.com/SFuNO7CMi" width="100%" height="600px"></iframe>
+    </div>
     </div>
     <!-- End Of Chat Room -->
   </section>
