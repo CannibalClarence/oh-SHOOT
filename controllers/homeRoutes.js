@@ -6,7 +6,13 @@ const { User } = require("../models/user");
     res.sendFile(path.join(__dirname, 'public/index.html'))
 ); */
 
+router.get('/', (req, res) =>{
 
+    // User.findAll().then(
 
+        res.render('home')
+    // )
+
+})
 
 module.exports = router;
