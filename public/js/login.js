@@ -1,3 +1,4 @@
+console.log('Hello')
 // Get the modal
 var loginModal = document.getElementById("loginModal");
 
@@ -85,7 +86,7 @@ async function loginForm(event) {
     // these must have content
     if (username && password) {
         //fetch 
-        const response = await fetch("/api/users/", {
+        const response = await fetch("/api/users", {
             method: "POST",
             body: JSON.stringify({
                 username,
@@ -152,7 +153,7 @@ async function signupForm(event) {
         }
     }
     // login / signup same time
-    const responseTwo = await fetch("/api/users/", {
+    const responseTwo = await fetch("/api/users", {
         method: "POST",
         body: JSON.stringify({
             username,

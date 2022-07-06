@@ -835,7 +835,7 @@ var inputScore = function(event){
 }
 
 var displayScore = function(){
-   var scoreHistory = JSON.parse(localStorage.getItem("scores")); //parse the updated score array
+   var scoreHistory = JSON.parse(localStorage.getItem("scores")) || 0; //parse the updated score array
    var listofHS = document.getElementById("listofHS"); //link to list item in HTML
    listofHS.innerHTML = "";
 
