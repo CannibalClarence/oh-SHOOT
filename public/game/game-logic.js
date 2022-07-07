@@ -1,4 +1,13 @@
 // ---------- SET UP -------------
+var bestScore = document.getElementById("bestScore"); //link to span item in main page
+
+var scoreHigh //variable to save highest score
+
+const SAVE_KEY_SCORE = "highscore"; // save key for local storage of high score
+
+var scoreStr = localStorage.getItem(SAVE_KEY_SCORE);
+
+
 
 //keyboard constants
 var KEY_LEFT = 37;
@@ -97,6 +106,8 @@ Game.prototype.initialise = function(gameCanvas) {
         top: gameCanvas.height / 2 - this.config.gameHeight / 2,
         bottom: gameCanvas.height / 2 + this.config.gameHeight / 2,
     };
+
+    
 };
 
 function Ship(x, y) {
@@ -317,7 +328,11 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillText("oh shoot!", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
 
-    ctx.fillText("Press 'Space' to start. You can press P to pause if you're bad at this", game.width / 2, game.height/2); 
+    ctx.fillText("Press 'Space' to start. You can press P to pause if you're bad at this, and press M to mute.", game.width / 2, game.height/2); 
+
+    var bestScore = document.getElementById("bestScore"); //link to span item in main page
+    bestScore.textContent = scoreHigh;
+    displayScore();
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
@@ -354,6 +369,7 @@ function PlayState(config, level) {
 
 PlayState.prototype.enter = function(game) {
 
+    
     //  Create the ship.
     this.ship = new Ship(game.width / 2, game.gameBounds.bottom);
 
@@ -720,6 +736,9 @@ LevelIntroState.prototype.update = function(game, dt) {
 
 LevelIntroState.prototype.draw = function(game, dt, ctx) {
 
+    var saveScore = document.getElementById("saveScore"); 
+    saveScore.style.display = "none";
+    
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
 
@@ -735,35 +754,134 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
 
 
 // ----------- GAME OVER ---------
+if (scoreStr === null) {
+    scoreHigh = 0;
+} else {
+    scoreHigh = parseInt(scoreStr);
+}
 
 function GameOverState() {}
 
 GameOverState.prototype.update = function(game, dt) {};
+
+// GameOverState.prototype.draw = function(game, dt, ctx) {
+
+//     //  Clear the background.
+//     ctx.clearRect(0, 0, game.width, game.height);
+
+//     ctx.font="30px Arial";
+//     ctx.fillStyle = '#ffffff';
+//     ctx.textBaseline="center"; 
+//     ctx.textAlign="center"; 
+//     ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
+//     ctx.font="16px Arial";
+//     ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
+//     ctx.font="16px Arial";
+//     ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+
+
+//     if (game.score > scoreHigh) {
+//         scoreHigh = game.score;
+//         localStorage.setItem(SAVE_KEY_SCORE, scoreHigh);
+//     } 
+//     var bestScore = document.getElementById("bestScore"); //link to span item in main page
+//     bestScore.textContent = scoreHigh;
+
+// };
 
 GameOverState.prototype.draw = function(game, dt, ctx) {
 
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
 
-    ctx.font="30px Arial";
-    ctx.fillStyle = '#ffffff';
-    ctx.textBaseline="center"; 
-    ctx.textAlign="center"; 
-    ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
-    ctx.font="16px Arial";
-    ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
-    ctx.font="16px Arial";
-    ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+    var saveScore = document.getElementById("saveScore"); 
+    saveScore.style.display = "block";
+
+    var scoreText = document.getElementById("scoreText"); 
+    scoreText.textContent = game.score;
+
+    if (game.score > scoreHigh) {
+        scoreHigh = game.score;
+        localStorage.setItem(SAVE_KEY_SCORE, scoreHigh);
+    } 
+    var bestScore = document.getElementById("bestScore"); //link to span item in main page
+    bestScore.textContent = scoreHigh;
+
+};
+var scoreArray; //initialize score array
+
+if (localStorage.getItem("scores")){ //if there is a local storage item for scores
+    scoreArray = JSON.parse(localStorage.getItem("scores")); //populate score array with these scores
+} else {
+   scoreArray = []; //otherwise empty array
 };
 
-GameOverState.prototype.keyDown = function(game, keyCode) {
-    if(keyCode == KEY_SPACE) {
-        //  Space restarts the game.
-        game.lives = 3;
-        game.score = 0;
-        game.level = 1;
-        game.moveToState(new LevelIntroState(1));
+var inputScore = function(event){
+    event.preventDefault();
+
+    var inputInitials = document.getElementById("inputInitials"); 
+
+    var currentScore = { //save current score as array item
+        initials: inputInitials.value,
+        score: scoreText.textContent
+    };
+  
+    scoreArray.push(currentScore); //save current score to score array
+ 
+    var str= JSON.stringify(scoreArray);  //stringify new updated score array
+    localStorage.setItem("scores", str); //set the new updated score array 
+ 
+    displayScore();
+}
+
+var displayScore = function(){
+   var scoreHistory = JSON.parse(localStorage.getItem("scores")) || 0; //parse the updated score array
+   var listofHS = document.getElementById("listofHS"); //link to list item in HTML
+   listofHS.innerHTML = "";
+
+    for (var i = 0; i<scoreHistory.length; i++){ //make list item of each score history
+        var eachScore = document.createElement("ol");
+        eachScore.innerHTML = scoreHistory[i].initials + " has a score of " + scoreHistory[i].score;
+         listofHS.appendChild(eachScore);
     }
-};
+ 
+    
+}
+
+var saveScoreBtn = document.getElementById("saveScoreBtn"); 
+saveScoreBtn.addEventListener("click", function(event){
+   console.log("clicked");
+   inputScore(event);
+
+   var inputInitials = document.getElementById("inputInitials"); 
+   inputInitials.value = "";
+
+   game.lives = 3;
+   game.score = 0;
+   game.level = 1;
+   game.moveToState(new LevelIntroState(1));
+});
+
+
+// saveScoreBtn.addEventListener("keydown", "game", event => {
+//     if(keydown == KEY_SPACE) {
+//         //  Space restarts the game.
+//         game.lives = 3;
+//         game.score = 0;
+//         game.level = 1;
+//         game.moveToState(new LevelIntroState(1));
+//     }
+// });
+
+
+// GameOverState.prototype.keyDown = function(game, keyCode) {
+//     if(keyCode == KEY_SPACE) {
+//         //  Space restarts the game.
+//         game.lives = 3;
+//         game.score = 0;
+//         game.level = 1;
+//         game.moveToState(new LevelIntroState(1));
+//     }
+// };
 
 
