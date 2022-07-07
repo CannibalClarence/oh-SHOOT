@@ -1,3 +1,5 @@
+
+
 // ---------- SET UP -------------
 var bestScore = document.getElementById("bestScore"); //link to span item in main page
 
@@ -594,14 +596,14 @@ PlayState.prototype.update = function(game, dt) {
 };
 
 
-const img = new Image();   // Create new img element
-img.src = '../img/image.png'; // Set source path
-
-const invImg = new Image();   // Create new img element
-invImg.src = '../img/slack-imgs.gif'; // Set source path
 
 PlayState.prototype.draw = function(game, dt, ctx) {
-
+    
+    const img = new Image();   // Create new img element
+    img.src = '../img/image.png'; // Set source path
+    
+    const invImg = new Image();   // Create new img element
+    invImg.src = '../img/slack-imgs.gif'; // Set source path
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
     
