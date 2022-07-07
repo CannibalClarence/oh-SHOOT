@@ -594,19 +594,19 @@ PlayState.prototype.update = function(game, dt) {
 };
 
 
-const img = new Image();   // Create new img element
-img.src = '../img/image.png'; // Set source path
-
-const invImg = new Image();   // Create new img element
-invImg.src = '../img/slack-imgs.gif'; // Set source path
 
 PlayState.prototype.draw = function(game, dt, ctx) {
-
+    
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
     
     ctx.drawImage(img, this.ship.x - (this.ship.width / 2), this.ship.y - (this.ship.height / 2), this.ship.width+30, this.ship.height+30);
-
+    const img = new Image();   // Create new img element
+    img.src = '../img/image.png'; // Set source path
+    
+    const invImg = new Image();   // Create new img element
+    invImg.src = '../img/slack-imgs.gif'; // Set source path
+    
     for(var i=0; i<this.invaders.length; i++) {
         var invader = this.invaders[i];
         ctx.drawImage(invImg, invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
