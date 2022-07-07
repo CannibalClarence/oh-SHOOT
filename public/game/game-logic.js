@@ -328,7 +328,7 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillText("oh shoot!", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
 
-    // ctx.fillText("Press 'Space' to start. You can press P to pause if you're bad at this", game.width / 2, game.height/2); 
+    ctx.fillText("Press 'Space' to start. You can press P to pause if you're bad at this, and press M to mute.", game.width / 2, game.height/2); 
 
     var bestScore = document.getElementById("bestScore"); //link to span item in main page
     bestScore.textContent = scoreHigh;
