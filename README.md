@@ -33,4 +33,5 @@ HTML
 Heroku Link : https://ohshoot.herokuapp.com/
 
 ## ScreenShot
-![image](https://user-images.githubusercontent.com/100390351/178166114-375c7f9b-b2f8-4a03-a5d5-3791281374aa.png)
+![image](https://user-images.githubusercontent.com/100390351/178166133-0442ccca-ef72-4b24-8e2e-ddee3fdf1679.png)
+
