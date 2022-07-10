@@ -35,3 +35,6 @@ Heroku Link : https://ohshoot.herokuapp.com/
 ## ScreenShot
 ![image](https://user-images.githubusercontent.com/100390351/178166133-0442ccca-ef72-4b24-8e2e-ddee3fdf1679.png)
 
+## Contribution
+Made with love by https://github.com/AnukaZan
+and https://github.com/CannibalClarence
