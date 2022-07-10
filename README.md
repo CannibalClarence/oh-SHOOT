@@ -1,6 +1,6 @@
 # oh-SHOOT
 
-An evil space blob fish and a non air breathing cow rage in a epic battle in this archetypical space invaders archetype game.
+An evil space blob fish and a non air breathing cow rage in a epic battle in this space invaders archetype game.
  
 ## Purpose
 To create a Fullstack application that we as consumers of video games and fun, would use and be proud of.
