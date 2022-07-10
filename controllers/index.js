@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const homeRoutes = require('./homeRoutes');
-const userRoutes = require("./api/user-routes")
+const apiRoutes = require("./api")
 
 
 
 router.use('/', homeRoutes);
-router.use("/api/users", userRoutes);
+router.use("/api", apiRoutes);
 
 
 

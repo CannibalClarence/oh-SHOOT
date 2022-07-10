@@ -116,24 +116,25 @@ async function loginForm(event) {
 async function signupForm(event) {
     event.preventDefault();
 
-    const username = document.getElementById("#username-signup");
-    const userVal = "";
-    if (username) {
-        userVal = username.value.trim;
-    }
+    const username = document.querySelector("#username-signup").value.trim();
+    // const userVal = "";
+    // if (username) {
+    //     userVal = username.value.trim;
+    // }
 
-    const email = document.getElementById("#email-signup");
-    const emailVal = "";
-    if (email) {
-        emailVal = email.value.trim;
-    }
+    const email = document.querySelector("#email-signup").value.trim();
+    // const emailVal = "";
+    // if (email) {
+    //     emailVal = email.value.trim;
+    // }
 
-    const password = document.getElementById("#password-signup");
-    const passwordVal = "";
-    if (password) {
-        passwordlVal = password.value.trim;
-    }
+    const password = document.querySelector("#password-signup").value.trim();
+    // const passwordVal = "";
+    // if (password) {
+    //     passwordlVal = password.value.trim;
+    // }
 
+    console.log(username);
     if (username && email && password) {
         const response = await fetch("/api/users/create", {
             method: "POST",
@@ -147,7 +148,7 @@ async function signupForm(event) {
         console.log(username, email, password);
 
         if (response.ok) {
-            console.log(response);
+            document.location.replace('/home')
         } else {
             alert(response.statusText);
         }
@@ -158,6 +159,7 @@ async function signupForm(event) {
         body: JSON.stringify({
             username,
             password,
+            email,
         }),
         headers: { "Content-Type": "application/json" },
     });

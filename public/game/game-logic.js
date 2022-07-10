@@ -73,9 +73,9 @@ function Game(){
 }
 
 //SOUND VARIABLES
-var shoot = new Audio('../sounds/shoot.mp3');
-var bangs = new Audio('../sounds/bang.mp3');
-var explosion = new Audio('../sounds/explosion.mp3');
+var shoot = new Audio('/sounds/shoot.mp3');
+var bangs = new Audio('/sounds/bang.mp3');
+var explosion = new Audio('/sounds/explosion.mp3');
 
 const allSounds = document.querySelectorAll("audio");
 var isMuted = false;
@@ -600,10 +600,10 @@ PlayState.prototype.update = function(game, dt) {
 PlayState.prototype.draw = function(game, dt, ctx) {
     
     const img = new Image();   // Create new img element
-    img.src = '../img/image.png'; // Set source path
+    img.src = '/img/image.png'; // Set source path
     
     const invImg = new Image();   // Create new img element
-    invImg.src = '../img/slack-imgs.gif'; // Set source path
+    invImg.src = '/img/slack-imgs.gif'; // Set source path
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
     

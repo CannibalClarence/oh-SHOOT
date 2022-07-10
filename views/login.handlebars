@@ -10,23 +10,24 @@
         </div>
 
     </div>
-    <div class="modalBody">
+    {{!-- <div class="modalBody"> --}}
         <form id="signUpForm">
             <div class="mb-3">
-                <label for="exampleInputName1" class="form-label">Username</label>
-                <input class="form-input" type="text" id="exampleInputName1" id="username-signup"  />
+                <label for="username-signup">Username</label>
+                <input type="text"  id="username-signup"  />
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input class="form-input" type="email" id="exampleInputEmail1" aria-describedby="emailHelp" id="email-signup" />
+                <input class="form-input exampleInputEmail1" type="email" aria-describedby="emailHelp" id="email-signup" />
                 <div id="emailHelp" class="form-text">yes, give us your email, get ready for spam!</div>
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input class="form-input" type="password" id="exampleInputPassword1" id="password-signup"  />
+                <input class="form-input exampleInputPassword1" type="password"  id="password-signup"  />
             </div>
+            <button class="styleButton" type="submit" id="signupBtn">signup</button>
         </form>
-    </div>
+    {{!-- </div> --}}
     <div class="modalBody">
         <form id="signInForm">
             <div class="mb-3">
@@ -43,10 +44,10 @@
     <div class="modalFooter">
         <button class="styleButton" type="submit" id="loginBtn">login</button>
         
-        <button class="styleButton" type="submit" id="signupBtn">signup</button>
+        
 
 
     </div>
 </div>
 </div> 
-<script src="./js/login.js"></script>
+<script src="/js/login.js"></script>
