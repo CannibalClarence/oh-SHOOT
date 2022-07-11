@@ -71,9 +71,9 @@ function Game(){
 }
 
 //SOUND VARIABLES
-var shoot = new Audio('../sounds/shoot.mp3');
-var bangs = new Audio('../sounds/bang.mp3');
-var explosion = new Audio('../sounds/explosion.mp3');
+var shoot = new Audio('assets/sounds/shoot.mp3');
+var bangs = new Audio('assets/sounds/bang.mp3');
+var explosion = new Audio('assets/sounds/explosion.mp3');
 
 const allSounds = document.querySelectorAll("audio");
 var isMuted = false;
@@ -595,10 +595,10 @@ PlayState.prototype.update = function(game, dt) {
 
 
 const img = new Image();   // Create new img element
-img.src = '../img/image.png'; // Set source path
+img.src = 'assets/img/image.png'; // Set source path
 
 const invImg = new Image();   // Create new img element
-invImg.src = '../img/slack-imgs.gif'; // Set source path
+invImg.src = 'assets/img/slack-imgs.gif'; // Set source path
 
 PlayState.prototype.draw = function(game, dt, ctx) {
 
@@ -839,13 +839,18 @@ var displayScore = function(){
    var listofHS = document.getElementById("listofHS"); //link to list item in HTML
    listofHS.innerHTML = "";
 
-    for (var i = 0; i<scoreHistory.length; i++){ //make list item of each score history
+   var y = scoreHistory.length
+   if (y > 5){
+    y = 5;
+    }
+
+    for (var i = 0; i<y; i++){ //make list item of each score history
         var eachScore = document.createElement("ol");
         eachScore.innerHTML = scoreHistory[i].initials + " has a score of " + scoreHistory[i].score;
-         listofHS.appendChild(eachScore);
+         listofHS.append(eachScore);
     }
  
-    
+   
 }
 
 var saveScoreBtn = document.getElementById("saveScoreBtn"); 
