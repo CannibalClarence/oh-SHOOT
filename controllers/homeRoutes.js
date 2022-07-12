@@ -10,10 +10,10 @@ const { User } = require("../models/user");
 
 router.get('/', (req, res) =>{
 
-    User.findAll().then(
+    // User.findAll().then(
 
         res.render('home')
-    )
+    // )
 
 })
 
