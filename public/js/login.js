@@ -116,19 +116,21 @@ async function loginForm(event) {
 async function signupForm(event) {
     event.preventDefault();
 
-    const username = document.querySelector("#username-signup").value.trim();
+    const usernameEl = document.querySelector("#exampleInputName1")
+    console.log(usernameEl);
+    var username = usernameEl.value.trim();
     // const userVal = "";
     // if (username) {
     //     userVal = username.value.trim;
     // }
 
-    const email = document.querySelector("#email-signup").value.trim();
+    const email = document.querySelector("#exampleInputEmail1").value.trim();
     // const emailVal = "";
     // if (email) {
     //     emailVal = email.value.trim;
     // }
 
-    const password = document.querySelector("#password-signup").value.trim();
+    const password = document.querySelector("#exampleInputPassword1").value.trim();
     // const passwordVal = "";
     // if (password) {
     //     passwordlVal = password.value.trim;
@@ -148,7 +150,8 @@ async function signupForm(event) {
         console.log(username, email, password);
 
         if (response.ok) {
-            document.location.replace('/home')
+            alert("You have been signed up!");
+            document.location.replace('/')
         } else {
             alert(response.statusText);
         }
@@ -175,6 +178,8 @@ async function signupForm(event) {
         //alert sending response from login attempt
         alert(responseTwo.statusText);
     }
+
+    
 }
 
 
